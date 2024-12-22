@@ -6,6 +6,7 @@
 *.user
 *.sln.docstates
 .vscode/
+database.db
 
 # Build results
 

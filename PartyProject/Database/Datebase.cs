@@ -12,52 +12,49 @@ record DatabaseConfig
 {
     public string GenerateStringConfig()
     {
-        return $"Filename={FileName};Mode={Mode};Cache={Cache};Foreign Keys={ForeignKeys}";
+        return @$"
+        Filename={FileName};
+        Mode={Mode};
+        Cache={Cache};
+        Foreign Keys={ForeignKeys};";
     }
 }
 
-class DatabaseManager(DatabaseConfig databaseConfig)
+class DatabaseManager
 {
-    private readonly DatabaseConfig DatabaseConfig = databaseConfig;
+    private readonly SqliteConnection Connection;
+    private readonly DatabaseConfig DatabaseConfig;
 
-    public void ExecuteQueries(SqliteCommand command)
+    public DatabaseManager(DatabaseConfig databaseConfig)
     {
-        using var connection = new SqliteConnection(DatabaseConfig.GenerateStringConfig());
-        connection.Open();
-        ExecuteQuery(command, connection);
-        connection.Close();
-
-    }
-
-    public void ExecuteQueries(params SqliteCommand[] commands)
-    {
-        using var connection = new SqliteConnection(DatabaseConfig.GenerateStringConfig());
-        connection.Open();
-        foreach (SqliteCommand command in commands)
+        DatabaseConfig = databaseConfig;
+        Connection = new SqliteConnection(DatabaseConfig.GenerateStringConfig());
+        try
         {
-            ExecuteQuery(command, connection);
-        }
-        connection.Close();
-    }
-
-    private static void ExecuteQuery(SqliteCommand command, SqliteConnection connection)
-    {
-        command.Connection = connection;
-        if (CheckNonQuery(command.CommandText))
-            command.ExecuteNonQuery();
-        else
-            command.ExecuteReader();
-    }
-
-    public static bool CheckNonQuery(string query)
-    {
-        string[] splitQuery = query.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        string[] nonQueryCommands = ["update", "insert", "delete", "create"];
-        foreach (string command in splitQuery)
+            Connection.Open();
+        } catch (Exception ex)
         {
-            if (nonQueryCommands.Contains(command))
-                return true;
+            Console.WriteLine(ex);
         }
-        return false;
+    }
+
+    public void CreateInsertUpdateDeleteTable(SqliteCommand command)
+    {
+        command.Connection = Connection;
+        command.ExecuteNonQuery();
+    }
+
+    public void SelectTable(SqliteCommand command)
+    {
+        command.Connection = Connection;
+        command.ExecuteReader();
+    }
+
+    public bool CheckExistTable(string fileName)
+    {
+        SqliteCommand command = CreateTables.CheckExistTable();
+        command.Connection = Connection;
+        command.Parameters.AddWithValue("@tableName", fileName);
+        return (long)command.ExecuteScalar()! == 1;
     }
 }
