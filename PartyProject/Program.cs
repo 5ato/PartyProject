@@ -1,6 +1,5 @@
 ﻿using PartyProject.Entities;
 using PartyProject.Database;
-using Microsoft.Data.Sqlite;
 
 namespace PartyProject;
 
@@ -10,11 +9,19 @@ class Program
     {
         DatabaseConfig config = new("database.db");
         DatabaseManager manager = new(config);
-        if (!manager.CheckExistTable("Friends"))
+        if (!manager.CheckExistTable("Friends") && !manager.CheckExistTable("Establishments"))
         {
-            manager.CreateInsertUpdateDeleteTable(CreateTables.CreateNameTable("Friends"));
+            manager.CreateInsertUpdateDeleteTable(CreateTables.CreateFriendsTable());
+            manager.CreateInsertUpdateDeleteTable(CreateTables.CreateEstablishmentsTable());
         }
 
         // CalculationProject calculation = new();
+        ListFriends friends = new(manager);
+        friends.CheckWhoWasInParty();
+        friends.AddNewFreinds(manager);
+        foreach(Friend friend in friends.Friends)
+        {
+            Console.WriteLine(friend.Name);
+        }
     }
 }

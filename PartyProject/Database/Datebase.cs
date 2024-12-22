@@ -2,7 +2,7 @@ using Microsoft.Data.Sqlite;
 
 namespace PartyProject.Database;
 
-record DatabaseConfig
+public record DatabaseConfig
 (
     string FileName, 
     string Mode = "ReadWriteCreate", 
@@ -20,7 +20,7 @@ record DatabaseConfig
     }
 }
 
-class DatabaseManager
+public class DatabaseManager
 {
     private readonly SqliteConnection Connection;
     private readonly DatabaseConfig DatabaseConfig;
@@ -44,10 +44,10 @@ class DatabaseManager
         command.ExecuteNonQuery();
     }
 
-    public void SelectTable(SqliteCommand command)
+    public SqliteDataReader SelectTable(SqliteCommand command)
     {
         command.Connection = Connection;
-        command.ExecuteReader();
+        return command.ExecuteReader();
     }
 
     public bool CheckExistTable(string fileName)

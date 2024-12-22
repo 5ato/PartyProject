@@ -30,7 +30,7 @@ class CalculationProject
     {
         Console.WriteLine("Напишите название вашей тусы");
         string result;
-        while (!string.IsNullOrWhiteSpace(result = Console.ReadLine()!))
+        while (string.IsNullOrWhiteSpace(result = Console.ReadLine()!))
         {
             Console.WriteLine("Введите заново");
         }
