@@ -26,6 +26,11 @@ public class SelectTables
     {
         return new SqliteCommand("SELECT name FROM Friends");
     }
+
+    public static SqliteCommand SelectAllEstablishmentsFriends()
+    {
+        return new SqliteCommand("SELECT name FROM Establishments");
+    }
 }
 
 public class InsertTables

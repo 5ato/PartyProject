@@ -19,9 +19,6 @@ class Program
         ListFriends friends = new(manager);
         friends.CheckWhoWasInParty();
         friends.AddNewFreinds(manager);
-        foreach(Friend friend in friends.Friends)
-        {
-            Console.WriteLine(friend.Name);
-        }
+        Establishments establishment = new(manager);
     }
 }

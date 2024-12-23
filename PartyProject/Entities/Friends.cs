@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.Data.Sqlite;
 using PartyProject.Database;
+using PartyProject.Utils;
 
 namespace PartyProject.Entities;
 
@@ -33,8 +34,8 @@ public class ListFriends
         foreach (Friend friend in Friends)
         {
             Console.WriteLine($"Ваш друг {friend.Name} был на тусе?(напишите + или -)");
-            GetAnswerWhoWas(out string answer);
-            if (CheckYes(answer))
+            WhileGet.GetAnswerChoice(out string answer);
+            if (WhileGet.CheckYes(answer))
                 result.Add(friend);
         }
         Friends = result;
@@ -46,7 +47,7 @@ public class ListFriends
         List<Friend> temp = [];
         while (Friends.Count < 100)
         {
-            GetNewName(out string name);
+            WhileGet.GetName(out string name);
             if (name == "-")
                 break;
             Friend newFreind = new(name);
@@ -62,14 +63,6 @@ public class ListFriends
         }
         manager.CreateInsertUpdateDeleteTable(InsertTables.InsertName(ConvertString(temp)));
     }
-    
-    private static void GetAnswerWhoWas(out string answer)
-    {
-        while (string.IsNullOrWhiteSpace(answer = Console.ReadLine()!) || !CheckYesOrNo(answer))
-        {
-            Console.WriteLine("Напишите заного");
-        }
-    }
 
     public static string ConvertString(List<Friend> friends)
     {
@@ -81,23 +74,5 @@ public class ListFriends
                 result.Append(", ");
         }
         return result.ToString();
-    }
-
-    private static void GetNewName(out string name)
-    {
-        while (string.IsNullOrWhiteSpace(name = Console.ReadLine()!))
-        {
-            Console.WriteLine("Напишите заного");
-        }
-    }
-
-    private static bool CheckYesOrNo(string word)
-    {
-        return "да нет + -".Contains(word, StringComparison.OrdinalIgnoreCase);
-    }
-    
-    private static bool CheckYes(string word)
-    {
-        return "да +".Contains(word, StringComparison.OrdinalIgnoreCase);
     }
 }
