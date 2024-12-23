@@ -35,7 +35,7 @@ public class ListFriends
         {
             Console.WriteLine($"Ваш друг {friend.Name} был на тусе?(напишите + или -)");
             WhileGet.GetAnswerChoice(out string answer);
-            if (WhileGet.CheckYes(answer))
+            if (Conditions.CheckYes(answer))
                 result.Add(friend);
         }
         Friends = result;

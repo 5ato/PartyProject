@@ -4,20 +4,27 @@ class WhileGet
 {
     public static void GetAnswerChoice(out string answer)
     {
-        while (string.IsNullOrWhiteSpace(answer = Console.ReadLine()!) || !CheckYesOrNo(answer))
+        while (string.IsNullOrWhiteSpace(answer = Console.ReadLine()!) || !Conditions.CheckYesOrNo(answer))
         {
             Console.WriteLine("Напишите заного");
         }
     }
 
-    public static bool CheckYesOrNo(string word)
+    public static void WhileGetDate(out DateTime dateTime)
     {
-        return "да нет + -".Contains(word, StringComparison.OrdinalIgnoreCase);
+        while (!DateTime.TryParse(Console.ReadLine(), out dateTime))
+        {
+            Console.WriteLine("Введите заново");
+        }
     }
-    
-    public static bool CheckYes(string word)
+
+    public static string WhileGetResultPath(out string path)
     {
-        return "да +".Contains(word, StringComparison.OrdinalIgnoreCase);
+        while (!string.IsNullOrWhiteSpace(path = Console.ReadLine()!) || !Directory.Exists(path))
+        {
+            Console.WriteLine("Введите заново");
+        }
+        return path;
     }
 
     public static void GetName(out string name)

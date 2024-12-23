@@ -27,7 +27,7 @@ public class Establishments
             {
                 Console.WriteLine("Далее вам будет предоставлен список заведений в которых вы раньше были напишите + или - для выбора");
                 WhileGet.GetAnswerChoice(out string answer);
-                if (WhileGet.CheckYes(answer))
+                if (Conditions.CheckYes(answer))
                 {
                     result = resultExecute[0].ToString()!;
                     break;

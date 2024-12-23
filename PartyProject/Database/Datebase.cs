@@ -20,18 +20,18 @@ public record DatabaseConfig
     }
 }
 
-public class DatabaseManager
+public class DatabaseManager : IDisposable
 {
-    private readonly SqliteConnection Connection;
-    private readonly DatabaseConfig DatabaseConfig;
+    private readonly SqliteConnection _connection;
+    private readonly DatabaseConfig _databaseConfig;
 
     public DatabaseManager(DatabaseConfig databaseConfig)
     {
-        DatabaseConfig = databaseConfig;
-        Connection = new SqliteConnection(DatabaseConfig.GenerateStringConfig());
+        _databaseConfig = databaseConfig;
+        _connection = new SqliteConnection(_databaseConfig.GenerateStringConfig());
         try
         {
-            Connection.Open();
+            _connection.Open();
         } catch (Exception ex)
         {
             Console.WriteLine(ex);
@@ -40,21 +40,26 @@ public class DatabaseManager
 
     public void CreateInsertUpdateDeleteTable(SqliteCommand command)
     {
-        command.Connection = Connection;
+        command.Connection = _connection;
         command.ExecuteNonQuery();
     }
 
     public SqliteDataReader SelectTable(SqliteCommand command)
     {
-        command.Connection = Connection;
+        command.Connection = _connection;
         return command.ExecuteReader();
     }
 
     public bool CheckExistTable(string fileName)
     {
         SqliteCommand command = CreateTables.CheckExistTable();
-        command.Connection = Connection;
+        command.Connection = _connection;
         command.Parameters.AddWithValue("@tableName", fileName);
         return (long)command.ExecuteScalar()! == 1;
+    }
+
+    public void Dispose()
+    {
+        _connection.Dispose();
     }
 }
