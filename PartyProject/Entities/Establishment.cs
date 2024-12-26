@@ -1,13 +1,17 @@
+using System.Runtime.InteropServices;
 using Microsoft.Data.Sqlite;
 using PartyProject.Database;
 using PartyProject.Utils;
 
 namespace PartyProject.Entities;
 
-public class Establishments
+public record Establishment
 {
     public string Name;
-    public Establishments(DatabaseManager manager)
+    public ListFriends ListFriends;
+    public int Check;
+    public string WhoClose;
+    public Establishment(DatabaseManager manager, ListFriends listFriends)
     {
         Name = GetEstablismentFromDB(manager);
         if (string.IsNullOrWhiteSpace(Name))
@@ -15,6 +19,26 @@ public class Establishments
             Console.WriteLine("Напишите название заведения");
             WhileGet.GetName(out Name);
         }
+
+        Console.WriteLine("Напишите общую сумму чека на данное заведение");
+        WhileGet.WhileGetNumber(out Check);
+
+        ListFriends = WhoWasInEstablishment(listFriends);
+
+        Console.WriteLine("Напишите кто должен закрыть счёт");
+        WhoClose = WhileGet.GetWhoClose(ListFriends);
+    }
+
+    private static ListFriends WhoWasInEstablishment(ListFriends listFriends)
+    {
+        List<Friend> friends = [];
+        foreach (Friend friend in listFriends.Friends)
+        {
+            Console.WriteLine($"Этот бибизьян -> {friend.Name} был на в заведении?(напишите сумму на которую он обожрался или поставьте - если его не было)");
+            if (WhileGet.WhileGetCost(out int number))
+                friends.Add(new Friend(friend.Name, number));
+        }
+        return new ListFriends(friends);
     }
 
     private static string GetEstablismentFromDB(DatabaseManager manager)
@@ -36,4 +60,9 @@ public class Establishments
         }
         return result;
     }
+}
+
+public class ListEstablishment
+{
+    public List<Establishment> Establishments = [];
 }

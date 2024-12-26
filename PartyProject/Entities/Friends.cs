@@ -5,7 +5,7 @@ using PartyProject.Utils;
 
 namespace PartyProject.Entities;
 
-public record struct Friend(string Name);
+public record struct Friend(string Name, int Wasted = 0);
 
 public class ListFriends
 {
@@ -14,6 +14,11 @@ public class ListFriends
     public ListFriends(DatabaseManager manager)
     {
         GetListFriendsDatabase(manager);
+    }
+
+    public ListFriends(List<Friend> friends)
+    {
+        Friends = friends;
     }
 
     private void GetListFriendsDatabase(DatabaseManager manager)
@@ -49,7 +54,7 @@ public class ListFriends
         {
             WhileGet.GetName(out string name);
             if (name == "-")
-                break;
+                return;
             Friend newFreind = new(name);
             if (Friends.Contains(newFreind))
             {
