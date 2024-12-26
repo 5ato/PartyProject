@@ -28,5 +28,7 @@ class Program
             establishments.Establishments.Add(new Establishment(manager, friends));
             Console.WriteLine("У вас были ещё заведения куда вы заходили?(напишите - если нет)");
         }
+        Calculation calculation = new(establishments);
+        calculation.GetWhoCreditor();
     }
 }
