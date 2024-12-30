@@ -8,7 +8,7 @@ class WhileGet
     {
         while (string.IsNullOrWhiteSpace(answer = Console.ReadLine()!) || !Conditions.CheckYesOrNo(answer))
         {
-            Console.WriteLine("Напишите заного");
+            Console.WriteLine("Напишите заново");
         }
     }
 
@@ -22,27 +22,32 @@ class WhileGet
 
     public static void WhileGetNumber(out int number)
     {
-        while (!int.TryParse(Console.ReadLine(), out number))
+        while (true)
         {
+            if (int.TryParse(Console.ReadLine(), out number) && number > 0)
+                break;
             Console.WriteLine("Введите заново");
         }
     }
 
     public static bool WhileGetCost(out int number)
     {
+        number = 0;
         string input;
-        while (!int.TryParse(input = Console.ReadLine()!, out number))
+        while (!Conditions.CheckNo(input = Console.ReadLine()!))
         {
-            if (Conditions.CheckNo(input))
-                break;
+            if (int.TryParse(input, out number) && number > 0)
+                return true;
             Console.WriteLine("Введите заново");
         }
-        return !Conditions.CheckNo(input);
+
+        number = 0;
+        return false;
     }
 
     public static void WhileGetResultPath(out string path)
     {
-        while (!string.IsNullOrWhiteSpace(path = Console.ReadLine()!) || !Directory.Exists(path))
+        while (string.IsNullOrWhiteSpace(path = Console.ReadLine()!) || !Directory.Exists(path))
         {
             Console.WriteLine("Введите заново");
         }
@@ -52,7 +57,19 @@ class WhileGet
     {
         while (string.IsNullOrWhiteSpace(name = Console.ReadLine()!))
         {
-            Console.WriteLine("Напишите заного");
+            Console.WriteLine("Напишите заново");
+        }
+    }
+
+    public static void GetFileName(out string name)
+    {
+        while (string.IsNullOrWhiteSpace(name = Console.ReadLine()!))
+        {
+            Console.WriteLine("Напишите заново");
+        }
+        if (!Path.HasExtension(name) || Path.GetExtension(name) != ".txt")
+        {
+            name = Path.ChangeExtension(name, ".txt");
         }
     }
 
@@ -61,7 +78,7 @@ class WhileGet
         string name;
         while (string.IsNullOrWhiteSpace(name = Console.ReadLine()!) || !listFriends.Friends.Exists(f => f.Name == name))
         {
-            Console.WriteLine("Напишите заного, возможно этого человека не было в заведении");
+            Console.WriteLine("Напишите заново, возможно этого человека не было в заведении");
         }
         return name;
     }

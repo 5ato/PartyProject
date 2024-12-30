@@ -16,19 +16,20 @@ class Program
             manager.CreateInsertUpdateDeleteTable(CreateTables.CreateEstablishmentsTable());
         }
 
-        // CalculationProject calculation = new();
+        CalculationProject Project = new();
         ListFriends friends = new(manager);
         friends.CheckWhoWasInParty();
         friends.AddNewFreinds(manager);
         
         ListEstablishment establishments = new();
-        string input;
-        while (establishments.Establishments.Count == 0 || !Conditions.CheckNo(input = Console.ReadLine()))
+        while (establishments.Establishments.Count == 0 || !Conditions.CheckNo(Console.ReadLine()!))
         {
             establishments.Establishments.Add(new Establishment(manager, friends));
             Console.WriteLine("У вас были ещё заведения куда вы заходили?(напишите - если нет)");
         }
         Calculation calculation = new(establishments);
-        calculation.GetWhoCreditor();
+
+        Writer writer = new(Project.ResultPath, Project.ResultName, Project, establishments, calculation);
+        writer.Write();
     }
 }

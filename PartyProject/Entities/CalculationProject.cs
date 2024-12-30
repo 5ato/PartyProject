@@ -21,6 +21,6 @@ class CalculationProject
         WhileGet.WhileGetResultPath(out ResultPath);
 
         Console.WriteLine("Напишите название вашего файла");
-        WhileGet.GetName(out ResultName);
+        WhileGet.GetFileName(out ResultName);
     }
 }

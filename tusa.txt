@@ -1,0 +1,7 @@
+====Party====
+20.10.2024 0:00:00
+
+Boba => Aboba: 2000
+Boba => Gopa: 2000
+Gopa => Aboba: 500
+

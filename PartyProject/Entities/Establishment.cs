@@ -9,8 +9,15 @@ public record Establishment
 {
     public string Name;
     public ListFriends ListFriends;
-    public int Check;
     public string WhoClose;
+    public int TotalCheck 
+    {
+        get 
+        {
+            return ListFriends.Friends.Aggregate(0, (acc, x) => acc + x.Wasted);
+        }
+    }
+    
     public Establishment(DatabaseManager manager, ListFriends listFriends)
     {
         Name = GetEstablismentFromDB(manager);
@@ -19,9 +26,6 @@ public record Establishment
             Console.WriteLine("Напишите название заведения");
             WhileGet.GetName(out Name);
         }
-
-        Console.WriteLine("Напишите общую сумму чека на данное заведение");
-        WhileGet.WhileGetNumber(out Check);
 
         ListFriends = WhoWasInEstablishment(listFriends);
 
